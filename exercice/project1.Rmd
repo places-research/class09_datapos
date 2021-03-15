@@ -1,0 +1,105 @@
+---
+date: "2019-05-05T00:00:00+01:00"
+draft: true
+menu:
+  dados_pos:
+    parent: Projetos
+    weight: 10
+title: Projeto 1
+toc: true
+type: docs
+weight: 10
+---
+
+## Pré-requisitos
+
+Para desenvolver esta tarefa você precisará dos seguintes pacotes:
+- `rMarkdown`   
+- `knitr`   
+- `rpubs`   
+- `prettydoc`   
+
+Será necessário também que ao menos um representante do grupo crie uma conta na plataforma [RPubs](https://rpubs.com/)
+
+
+## Atividades para consolidação do Projeto 01:
+
+### Criar um relatório em `RMarkdown`
+
+#### 1. Criar arquivo `RMarkdown` (.Rmd)
+- Criar um novo arquivo rmarkdown `.Rmd` no `Rstudio`. 
+- O nome do arquivo deverá ser: sobrenome-inicialdoprimeironome-proj01.Rmd (exemplo: oliveira-r-proj01.Rmd)
+
+#### 2. Editar o cabeçalho YAML no topo do documento, incluindo:
+- data
+- título que represente o conteúdo do relatório
+
+Bônus: descubra em uma breve pesquisa na internet como colocar um código para que a data seja sempre aquela do sistema operacional do computador. 
+
+#### 3. Adicione código ao seu documento
+- Criar um novo `code chunk`. 
+
+> Dica: As teclas `ctr` + `shift` + `i` são um atalho eficiente para geração de `chunks` no `R`.
+
+- Copie e cole o código a seguir no `code chunk` que você acabou de criar.
+```{r}
+my_variable <- 10
+my_varıable
+```
+PERGUNTA: Por que o código não funciona? 
+
+
+
+#### 3. Descreva o problema que será abordado pelo grupo no projeto final da disciplina. 
+
+
+#### 4. Adicione código ao seu documento
+- Criar um novo `code chunk`.
+- Copie e cole o código a seguir no `code chunk` que você acabou de criar.
+```{r}
+
+```
+
+- Abaixo do trecho de código em seu documento R Markdown, adicione algum TEXTO que descreva o que a trama que você criou mostra - interprete o que você vê nos dados.
+
+#### 5. Responda as seguintes perguntas:
+5.1. O que é `open science` e por que ela é importante?
+
+5.2. Como as abordagens que incluem o uso de `R Markdown` podem ser úteis tanto para você quanto para seus colegas com quem você trabalha em um projeto e para seguir os princípios da `open science` em geral?
+
+5.3. Os princípios da `open science` são aplicáveis à gestão de negócios? Explique e exemplifique. 
+
+BÔNUS: Se você já conhece o R, limpe as representações adicionando etiquetas e um título. Ou melhor ainda, use ggplot2!
+
+## Rubrica de avaliação
+
+Embora a presença nos encontros síncronos não seja explicitamente acompanhada, a participação neste curso conta para sua nota. A seguir, são apresentados os critérios considerados para a avaliação do projeto integrador que são úteis para nortear o desenvolvimento do trabalho. 
+
+Certifique-se que você está cadastrado ao servidor da disciplina no `Discord`. 
+
+### Relatório RMarkdown
+
+|Item|Proporção da nota
+|----|-----------------
+|Sintaxe do código |20%
+|HTML e Rmd apresentados|0,5
+|YAML contém título, autor e data|0,5
+|O arquivo foi nomeado conforme diretrizes|0,5
+|A gramática e a ortografia são excelentes - sem erros de ortografia|0,5
+
+|Item|Proporção da nota
+|----|-----------------
+|Execução do código|20%
+|O `code chunk` contém código e roda|1	 	 
+|O `code chunk` está formatado corretamente|1
+
+|Item|Proporção da nota
+|----|-----------------
+|Conteúdo do relatório|60%
+|Caracterização do problema proposto para o projeto final|
+
+### Aprendizagem independente (opcional)
+
+Há vários materiais, tutoriais e cursos sobre R gratuitos produzidos nos últimos anos. É realmente difícil escolher um para começar. Minha sugestão para quem estiver perdida ou perdido e quiser estudar um pouco mais é fazer o curso "[Introduction to R](https://www.datacamp.com/courses/free-introduction-to-r)" no site Datacamp.
+
+

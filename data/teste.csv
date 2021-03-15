@@ -1,0 +1,3 @@
+﻿hotel;media_lead <- mean(lead_time, na.rm = TRUE)
+City Hotel;109,7357241900920
+Resort Hotel;92,6756864702946

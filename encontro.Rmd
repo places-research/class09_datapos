@@ -1,0 +1,90 @@
+---
+title: "Encontro 7"
+author: "Renata Oliveira"
+date: "23/02/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Libraries
+
+```{r}
+library(tidyverse)
+```
+
+
+# Download dos dados
+
+```{r}
+library(readr)
+hotels <- read_csv("D:/OneDrive - cefetmg.br/01_disciplinas/ERE/2020_2/R_ppga/01_aulas/class07_datapos/data/hotels.csv", 
+    locale = locale())
+View(hotels)
+```
+
+# Tratamento dos dados
+
+```{r}
+names(hotels)
+glimpse(hotels)
+select(hotels, lead_time)
+```
+
+# Pipe
+
+```{r}
+hotels %>%
+  select(hotel, lead_time)
+```
+
+```{r}
+hotels %>% #<<
+  select(hotel, lead_time) %>%
+  arrange(desc(lead_time))
+```
+
+```{r}
+media_lead_time_tipo <- hotels %>% #<<
+  select(hotel, lead_time) %>%
+  group_by(hotel) %>% 
+  summarise(media_lead <- mean(lead_time, na.rm = TRUE))
+
+media_lead_time_tipo
+```
+```{r}
+write_excel_csv2(media_lead_time_tipo, "./data/teste.csv")
+```
+
+
+```{r}
+lead_ordena <- hotels %>% 
+  select(hotel, lead_time) %>%
+  arrange(desc(lead_time))
+
+lead_ordena
+```
+
+```{r}
+write_excel_csv2(lead_ordena, "./data/lead_agora_sim.csv")
+```
+
+# Plot
+
+```{r}
+ggplot(hotels, aes(y = lead_time)) + 
+  geom_bar()
+```
+
+```{r}
+
+lead_time_hotel <- hotels %>% 
+  group_by(hotel) %>%
+  summarise(avg = mean(lead_time))
+
+ggplot(lead_time_hotel, aes(x = avg, fill = hotel)) + 
+  geom_bar()
+```
+

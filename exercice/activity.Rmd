@@ -1,0 +1,189 @@
+---
+title: "Untitled"
+author: "Renata Oliveira"
+date: "01/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Bibliotecas
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+ticdom_url <- "http://cetic.br/media/microdados/153/ticdom_2017_domicilios_base_de_microdados_v1.1.csv"
+
+ticdom <- read_csv2(ticdom_url)
+```
+
+# Introdução ao pacote dplyr
+
+## Renomeando variáveis
+
+O primeiro argumento da função rename deve ser a base de dados cujos nomes das variáveis serão renomeados. Depois da primeira vírgula, inserimos todos as modificações de nomes, novamente separadas por vírgulas, e da seguinte maneira. Exemplo: nome_novo = nome_velho. Exemplo: nome_novo = Nome_Velho. Veja o exemplo, em que damos novos nomes às variáveis "A1_B" e "a2_qtd_note", respectivamte se há algum notebook no domicílio e quantos há.
+
+```{r}
+ticdom <- rename(ticdom, notebook = A1_B, notebook_n = a2_qtd_note)
+```
+
+Execute a mesma função com o operador `pipe` %>%.
+
+
+## Selecionando colunas
+
+Algumas colunas podem ser dispensáveis em nosso banco de dados a depender da análise. Por exemplo, pode ser que nos interessem apenas as variáveis que já renomeamos. Para selecionar um conjunto de variáveis, utilizaremos o segundo verbo do dplyr que aprenderemos: select
+
+```{r}
+ticdom <- dplyr::select(ticdom,
+                 renda,
+                 notebook_n,
+                 desktop_n,
+                 tablet_n,
+                 internet,
+                 tipo_conexao,
+                 preco_internet,
+                 estrato,
+                 peso,
+                 upa)
+```
+
+> Invista um pouco de tempo no aprendizado do operador pipe!
+
+```{r}
+ticdom <- ticdom_url %>% 
+  read_csv2() %>% 
+  rename(renda  = RENDA_FAMILIAR,
+         notebook_n = a2_qtd_note,
+         desktop_n = a2_qtd_desk,
+         tablet_n = a2_qtd_tab,
+         internet = A4,
+         tipo_conexao = A7,
+         preco_internet = A9,
+         estrato = ESTRATO,
+         peso = PESO,
+         upa = UPA) %>% 
+  dplyr::select(renda,
+         notebook_n,
+         desktop_n,
+         tablet_n,
+         internet,
+         tipo_conexao,
+         preco_internet,
+         estrato,
+         peso,
+         upa)
+```
+
+
+## Transformando variáveis
+
+Usaremos a função mutate para operar transformações nas variáveis existentes e criar variáveis novas. Há inúmeras transformações possíveis e elas lembram bastante as funções de outros softwares, como MS Excel. Vamos ver algumas das mais importantes.
+
+Por exemplo, diversas variáveis na TICDOM, como as referentes às perguntas sobre quantidade de computadores e tables, têm os valores 999999999 para indicar que a pergunta não se aplica. Podemos transformar esses valores em 0, fazendo sua substituição:
+
+```{r}
+ticdom <- ticdom %>%
+  mutate(notebook_n = replace(notebook_n, notebook_n == 999999999, 0),
+         desktop_n = replace(desktop_n, desktop_n == 999999999, 0),
+         tablet_n = replace(tablet_n, tablet_n == 999999999, 0))
+```
+
+Vamos agora aproveitar que temos as variáveis transformadas e criar uma nova, que representa a soma de todos os computadores e tablets de cada domicílio. Vamos dar a ela o nome 'devices_qtd' e, por utilizarmos um nome novo de variável, haverá uma nova coluna à direita dos dados.
+
+```{r}
+ticdom <- ticdom %>%
+  mutate(devices_n = notebook_n + desktop_n + tablet_n)
+```
+
+## Filtrando linhas
+
+Por vezes, queremos trabalhar apenas com um conjunto de linhas do nosso banco de dados. Por exemplo, se quisermos selecionar apenas os respondentes com renda familiar "De R$ 1.874,01 até R$ 2.811,00" (valor 3 na variável renda), utilizamos o verbo 'filter' com a condição desejada. Note que estamos criando um novo data frame que contém a seleção de linhas produzida:
+
+```{r}
+ticdom_renda3 <- ticdom %>% 
+  filter(renda == 3)
+```
+
+## Pausa para operadores lógicos
+
+Já apresentamos os operadores relativos às estatísticas descritivas básicas. Segue uma síntese: 
+
+### Operadores aritméticos R
+
+Operador | Descrição
+---------|-----------
+x + y |	Adição de x com y
+x - y	| Subtração de y em x
+x * y	| Multiplicação de x e y
+x / y	| Divisão de x por y
+xy ou x**y	| x elevado a y-ésima potência
+x%%y	| Resto da divisão de x por y (módulo)
+x%/%y	| Parte inteira da divisão de x por y
+
+### Operadores de comparação no R
+
+Operador	| Significado
+----------|------------
+==	| igual a
+!=	| diferente de
+\>	| maior que
+<	| menor que
+\>=	| maior ou igual a
+<=	| menor ou igual a
+
+
+> Os operadores de comparação sempre retornam um valor lógico TRUE ou FALSE.
+
+
+### Operadores lógicos no R
+
+Operador|Descrição|Explicação
+--------|---------|----------
+&|	AND lógico|	Versão vetorizada. Compara dois elementos do tipo vetor e retorna um vetor de TRUEs e FALSEs
+&&	|AND lógico|	Versão não-vetorizada. Compara apenas o primeiro valor de cada vetor, retornando um valor lógico.
+\|	|OR lógico| Versão vetorizada. Compara dois elementos do tipo vetor e retorna um vetor de TRUEs e FALSEs
+\|\|	|OR lógico	|Versão não-vetorizada. Compara apenas o primeiro valor de cada vetor, retornando um valor lógico.
+!	|NOT lógico|Negação lógica. Retorna um valor lógico único ou um vetor de TRUE / FALSE.
+xor	|XOR	|Ou Exclusivo. Retorna valor lógico TRUE se ambos os valores de entrada forem diferentes entre si, e retorna FALSE se os valores forem iguais.
+
+> Também conhecidos como operadores booleanos, permitem trabalhar com múltiplas condições relacionais na mesma expressão, e retornam valores lógicos verdadeiro ou falso.
+
+### Algumas funções estatísticas para sumarização de dados
+
+Funções | Descrição
+--------|----------
+`min()`| mínimo  
+`max()`| máximo  
+`range()`| amplitude   
+`mean()`| média   
+`sum()`| soma
+`median()`| mediana
+`sd()`| desvio-padrão
+`IQR()`| intervalo interquantil
+`quantile()`| quartis
+`var()`| variância
+`cor()`| correlação
+`summary()`| métricas de sumarização
+`rowMeans()`| média das linhas
+`colMeans()`| média das colunas
+`rowSums()`| soma das linhas
+`colSums()`| soma das colunas
+
+### Tratamento de dados omissos
+O R permite que sejam armazenados, em vetores e data.frames, o valor `NA` (Not Available), que representa dados que ainda não são conhecidos. 
+
+
+>`x == NA` trará sempre um resultado FALSE, mesmo que `x` não seja conhecido.
+
+```{r}
+library(tidyverse)
+url_fake_data <- "https://raw.githubusercontent.com/leobarone/ifch_intro_r/master/data/fake_data.csv"
+fake <- read_delim(url_fake_data, delim = ";", col_names = T)
+```
+
